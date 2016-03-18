@@ -1,0 +1,354 @@
+@echo off
+SETLOCAL EnableDelayedExpansion
+for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1) do     rem"') do (
+  set "DEL=%%a"
+)
+cls
+
+:allover
+cls
+echo.
+echo.
+echo.
+echo.
+call :colorEcho 09 "Enter First THREE octets of IP of STORE" 
+echo.
+echo.
+echo.
+echo.
+echo.
+set /P ip1=Do not use final dot      (i.e 10.1.1):  
+
+:mainmenu
+cls
+echo 			           MAIN MENU 
+echo                             Please select option:
+echo.
+echo.
+echo	IP Selected 
+echo %ip1%
+echo.
+echo.
+echo                         1 - PING ROUGE DEVICES .49 - .70                                
+echo                         2 - CHECK DEVICES ONLINE
+echo.  
+echo 	                3 - PING ROUTER CONTINIOUS IN NEW WINDOW
+echo. 
+echo 	                4 - ENTER NEW STORE NUMBER 
+echo.                                          
+echo --------------------------------------------------------------------------------
+echo.
+
+set /p choice=Make a selection:
+if not '%choice%'=='' set choice=%choice:~0,1%
+if '%choice%'=='1' goto rouge1
+if '%choice%'=='2' goto dcheck1
+if '%choice%'=='3' goto pingrouter
+if '%choice%'=='4' goto allover
+
+
+if '%choice%'=='q' exit
+:pingrouter
+cls
+    
+start cmd /k ping %ip1%.2 -t
+goto mainmenu
+
+:rouge1
+:rstartover1
+cls  
+cls
+:rrepeatstore1
+cls
+echo Pinging for Rouge devices 49-70
+echo This may take some time, please wait...
+echo If no results appear then there are no alive devices in this range
+echo.
+
+
+
+@echo off
+for /l %%i in (49,1,70) do @ping %ip1%.%%i -n 1 -w 1 | find "Reply"
+
+echo Select option:
+echo.
+echo Press 1 to reping same IP
+echo Press 2 to main menu
+echo Press 3 to enter new store number
+echo Press x COMMAND PROMPT
+echo Press q to exit
+set /p choice=Make selection:
+if not '%choice%'=='' set choice=%choice:~0,1%
+if '%choice%'=='1' goto rrepeatstore1
+if '%choice%'=='2' goto mainmenu
+if '%choice%'=='3' goto allover
+if '%choice%'=='x' goto cmd
+if '%choice%'=='q' exit
+
+:cmd
+cls
+start cmd /k
+goto mainmenu
+
+@echo off
+cls
+:dcheck1
+:startover2
+cls
+echo DEVICE CHECK
+
+:rrepeatstore2
+cls
+echo CHECKING ROUTER, POS, OCB, BOH PC, HME TIMER, 
+echo AIRCARD, AIRTIGHT AND HP MANAGED SWITCH, LOOMIS SAFE
+echo.
+echo This may take some time, please wait...
+echo.
+echo CHECKING ROUTER...
+echo.
+ping %ip1%.2 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo BB DOWN
+) else (
+	echo ROUTER ONLINE
+)
+echo _______________________________________
+echo CHECKING POS...
+echo.
+
+ping %ip1%.21 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo POS1 ONLINE
+)
+
+ping %ip1%.22 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo POS2 ONLINE
+)
+
+ping %ip1%.23 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo POS3 ONLINE
+)
+
+ping %ip1%.24 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo POS4 ONLINE
+)
+
+ping %ip1%.25 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo POS5 ONLINE
+
+)
+ping %ip1%.26 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo POS6 ONLINE
+	
+)
+ping %ip1%.27 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo POS7 ONLINE
+	
+)
+ping %ip1%.28 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo POS8 ONLINE
+	
+)
+echo _______________________________________
+echo CHECKING OCB...
+echo.
+
+ping %ip1%.8 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo OCB OFFLINE OR NOT HYPERVIEW
+) else (
+	echo OCB ONLINE
+)
+echo _______________________________________
+echo CHECKING QSR'S...
+echo.
+
+ping %ip1%.31 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo QSR1 ONLINE
+)
+
+
+ping %ip1%.32 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo QSR2 ONLINE
+)
+
+
+ping %ip1%.33 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo QSR3 ONLINE
+)
+
+
+ping %ip1%.34 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo QSR4 ONLINE
+)
+
+
+ping %ip1%.35 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo QSR5 ONLINE
+)
+
+
+ping %ip1%.36 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo QSR6 ONLINE
+)
+
+
+ping %ip1%.37 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo QSR7 ONLINE
+)
+ping %ip1%.38 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo QSR8 ONLINE
+)
+echo _______________________________________
+echo CHECKING BOH PC...
+echo.
+
+ping %ip1%.11 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo  ...
+) else (
+	echo BOH PC ONLINE
+)
+echo _______________________________________
+echo CHECKING AIRCARD AND AIRTIGHT...
+echo.
+
+ping %ip1%.3 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo AIRCARD ONLINE
+)
+
+ping %ip1%.133 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo AIRTIGHT ONLINE
+)
+echo _______________________________________
+echo CHECKING HME TIMER...IF EMPTY, HME TIMER IS OFFLINE
+echo.
+
+ping %ip1%.41 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo HME TIMER ONLINE
+)
+
+
+ping %ip1%.42 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo.
+) else (
+	echo HME TIMER ONLINE
+)
+
+
+ping %ip1%.43 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo. 
+) else (
+	echo HME TIMER ONLINE
+)
+echo _______________________________________
+echo CHECKING IF SITE USES HP MANAGED SWITCH...
+echo.
+ping %ip1%.150 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo HP MANAGED SWITCH DOWN OR NO HP SWITCH...
+) else (
+	echo HP SWITCH UP
+)
+echo ------------------------------------
+echo CHECKING SAFE...
+echo.
+ping %ip1%.154 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo. 
+) else (
+	echo LOOMIS SAFE UP 
+)
+ping %ip1%.155 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo. 
+) else (
+	echo LOOMIS SAFE UP 
+)
+ping %ip1%.156 -n 1 -w 1000 | find "TTL=">nul
+if errorlevel 1 (
+	echo. 
+) else (
+	echo LOOMIS SAFE UP 
+)
+echo ----------------------------------
+
+echo Select option:
+
+echo Press 1 to reping same IP
+echo Press 2 to main menu
+echo Press 3 to enter new store number
+echo Press x COMMAND PROMPT
+echo Press q to exit
+set /p choice=Make selection:
+if not '%choice%'=='' set choice=%choice:~0,1%
+if '%choice%'=='1' goto rrepeatstore2
+if '%choice%'=='2' goto mainmenu
+if '%choice%'=='3' goto allover
+if '%choice%'=='x' goto cmd
+if '%choice%'=='q' exit
+
+:colorEcho
+echo off
+<nul set /p ".=%DEL%" > "%~2"
+findstr /v /a:%1 /R "^$" "%~2" nul
+del "%~2" > nul 2>&1i
+
