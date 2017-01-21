@@ -24,8 +24,9 @@ Gui, font, s15
 Gui, Add, Text, +Wrap x20 y125 w400, Select from the dropdowns to copy a command to the clipboard
 
 Gui, font, s13
-Gui, Add, Text, x20 y200 w400, TACO Reports
-Gui, Add, DropDownList, x20 y230 w475 vListREPORTS gOnselect, Regenerate DPOLL|Weekly Business Summary|Daily business summary|Build-to forecast report|Variance trend report|Product transfer report|Cross reference vendor sheet|Inventory count sheet|Daily report card|Posting activity report|Period end inventory|Weekly variance report|Weekly purchase journal|Off-premise sales activity report|Daily TMU flash report|
+
+Gui, Add, Text, x20 y200 w400, TACO Commands
+Gui, Add, DropDownList, x20 y230 w475 vListMISCCOMMANDS gOnselect, Mirror Check|Test Print|Database Error Check|Daily Password|Inventory Restore|General Poll|Off-Premise DB and TacoDB are not in sync|Latest TACO release|Force Sales *MUST RUN TEST POLL FIRST|Sync POS|Gift Card Check|TACO Hard Disk Size Check| |WineFix |WineFix tacodb|WineFix cmsdb|WineFix sosdb|WineFix shift|
 
 Gui, Add, Text, x20 y270 w400, TACO Shift Reports
 Gui, Add, DropDownList, x20 y300 w475 vListSHIFTREPORTS gOnselect, Shift performance report|Daily banking report|
@@ -39,11 +40,18 @@ Gui, Add, DropDownList, x20 y440 w475 vListSMARTREPORTS gOnselect, Team availabi
 Gui, Add, Text, x20 y480 w400, TACO TAS Reports
 Gui, Add, DropDownList, x20 y510 w475 vListTASREPORTS gOnselect, Call-in summary report|Paycheck verification report|Allowed hours report|Employee average hours worked report|Employee break summary|Labor dollars report|Hours worked report|Out of period adjustment summary|Employee overtime hours report|
 
-Gui, Add, Text, x20 y550 w400, Misc TACO Commands
-Gui, Add, DropDownList, x20 y580 w475 vListMISCCOMMANDS gOnselect, Mirror Check|Test Print|Database Error Check|Daily Password|Inventory Restore|General Poll|Off-Premise DB and TacoDB are not in sync|Latest TACO release|Force Sales *MUST RUN TEST POLL FIRST|Sync POS|Gift Card Check|TACO Hard Disk Size Check| |WineFix |WineFix tacodb|WineFix cmsdb|WineFix sosdb|WineFix shift|
+Gui, Add, Text, x20 y550 w400, Other TACO Reports
+Gui, Add, DropDownList, x20 y580 w475 vListREPORTS gOnselect, Regenerate DPOLL|Weekly Business Summary|Daily business summary|Build-to forecast report|Variance trend report|Product transfer report|Cross reference vendor sheet|Inventory count sheet|Daily report card|Posting activity report|Period end inventory|Weekly variance report|Weekly purchase journal|Off-premise sales activity report|Daily TMU flash report|
 
-Gui, Add, Text, x20 y620 w400, POS Commands
-Gui, Add, DropDownList, x20 y650 w475 vListPOS gOnselect, CHKDSK DFRAG|Iris Suspect|POSLIVE Suspect|Mobile Query for NRT SQL|Mobile Cashier SQL Query1|Mobile Cashier SQL Query2|POS Remote Reboot|
+Gui, Add, Text, x20 y620 w400, POS Task Manager Commands
+Gui, Add, DropDownList, x20 y650 w475 vListPOScmd gOnselect, Runas|Runas CMD|Runas Explorer|CHKDSK DEFRAG|POS Remote Reboot|Remote List Tasks|Remote Kill Task|Device Manager|SQL Server Mgmt Studio|UpdateLinks|RegMerge
+
+Gui, Add, Text, x20 y690 w400, POS SQL Commands
+Gui, Add, DropDownList, x20 y720 w475 vListPOSsql gOnselect, IRIS Suspect|POSLIVE Suspect|IRIS DB Errors|POSLIVE DB Errors|Mobile Cashier SQL Query1|Mobile Cashier QSL Query2|Find Joe Manager Password|Query for Reg9 NRT|Check for POSLive Errors|Check for IRIS Errors
+
+Gui, Add, Text, x20 y760 w400, eRestaurant Commands
+Gui, Add, DropDownList, x20 y790 w475 vListER gOnselect, Password Reset Hash|Bypass HME timer for No data received error|
+
 
 Gui, Add, MonthCal,x480 y20 gDatum vAdat Multi
 Gui, show, w725 h850
@@ -296,36 +304,98 @@ if (ListMISCCOMMANDS = "WineFix shift")
 {
 	clipboard = cd /tmp;mkdir shift;cd /usr/BOSS/shift/;keybuild sftdb;dchain sftdb;tacosudo.sh cp *.dbd *.dbf /tmp/shift;cd /home/support/.wine/drive_c/windows;tacosudo.sh chmod 666 work*;tacosudo.sh cp work* /tmp/shift;cd /tmp/shift;wine dbfix -p5000 sftdb;wine dbfix -p5000 sftdb;wine dbfix -p5000 sftdb;wine dbfix -p5000 sftdb;wine dbfix -p5000 sftdb;tacosudo.sh cp *.dbd *.dbf /usr/BOSS/shift;cd /usr/BOSS/shift;dbcheck -s sftdb;
 }
-if (ListPOS = "CHKDSK DFRAG")
+if (ListPOScmd = "CHKDSK DEFRAG")
 {
 	clipboard = echo y|chkdsk /f & shutdown –r –t 2700 & defrag c: -f -v & shutdown -r -t 0
 }
-
-if (ListPOS = "Iris Suspect")
+if (ListPOSsql = "IRIS Suspect")
 {
-	clipboard = EXEC sp_resetstatus Iris; ALTER DATABASE Iris SET EMERGENCY DBCC checkdb(Iris) ALTER DATABASE Iris SET SINGLE_USER WITH ROLLBACK IMMEDIATE DBCC CheckDB (Iris, REPAIR_ALLOW_DATA_LOSS) ALTER DATABASE Iris SET MULTI_USER
+	clipboard = EXEC sp_resetstatus Iris; ALTER DATABASE Iris SET EMERGENCY; DBCC checkdb(Iris); ALTER DATABASE Iris SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DBCC CheckDB (Iris, REPAIR_ALLOW_DATA_LOSS); ALTER DATABASE Iris SET MULTI_USER 
 }
-if (ListPOS = "POSLIVE Suspect")
+if (ListPOSsql = "IRIS DB Errors")
 {
-	clipboard = EXEC sp_resetstatus PosLive; ALTER DATABASE PosLive SET EMERGENCY DBCC checkdb(PosLive) ALTER DATABASE PosLive SET SINGLE_USER WITH ROLLBACK IMMEDIATE DBCC CheckDB (PosLive, REPAIR_ALLOW_DATA_LOSS) ALTER DATABASE PosLive SET MULTI_USER
+	clipboard = DBCC checkdb(Iris); ALTER DATABASE Iris SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DBCC CheckDB (Iris, REPAIR_ALLOW_DATA_LOSS); ALTER DATABASE Iris SET MULTI_USER
 }
-if (ListPOS = "Mobile Query for NRT SQL")
+if (ListPOSsql = "POSLIVE DB Errors")
+{
+	clipboard = DBCC checkdb(PosLive); ALTER DATABASE PosLive SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DBCC CheckDB (PosLive, REPAIR_ALLOW_DATA_LOSS); ALTER DATABASE PosLive SET MULTI_USER
+}
+if (ListPOSsql = "POSLIVE Suspect")
+{
+	clipboard = EXEC sp_resetstatus PosLive; ALTER DATABASE PosLive SET EMERGENCY; DBCC checkdb(PosLive); ALTER DATABASE PosLive SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DBCC CheckDB (PosLive, REPAIR_ALLOW_DATA_LOSS); ALTER DATABASE PosLive SET MULTI_USER
+}
+if (ListPOSsql = "Query for Reg9 NRT")
 {
 	clipboard = use iris select * from tblApplicationStrings where StringID = 5411
 }
-if (ListPOS = "Mobile Cashier SQL Query1")
+if (ListPOSsql = "Mobile Cashier SQL Query1")
 {
 	clipboard = Select * from tblcustomemployeeinfoxref where xrefnum = 54321
 }
-if (ListPOS = "Mobile Cashier SQL Query2")
+if (ListPOSsql = "Mobile Cashier SQL Query2")
 {
 	clipboard = insert into tblCustomEmployeeInfoXref (XrefName,XrefNum,ExternalNum) values ('MobileEmployeeID','54321','1')
 }
-if (ListPOS = "POS Remote Reboot")
+if (ListPOScmd = "POS Remote Reboot")
 {
 	clipboard = shutdown.exe -r -t 0 -m \\pos1
 }
-
+if (ListPOScmd = "Runas")
+{
+	clipboard = runas /user:remote_support 
+}
+if (ListPOScmd = "Runas CMD")
+{
+	clipboard = runas /user:remote_support cmd
+}
+if (ListPOScmd = "Runas Explorer")
+{
+	clipboard = runas /user:remote_support explorer
+}
+if (ListPOScmd = "Remote List Tasks")
+{
+	clipboard = tasklist /s \\pos#
+}
+if (ListPOScmd = "Remote Kill Task")
+{
+	clipboard = taskkill /s \\pos# /PID #
+}
+if (ListPOScmd = "Device Manager")
+{
+	clipboard = devmgmt.msc
+}
+if (ListPOSsql = "Find Joe Manager Password")
+{
+	clipboard = use iris select EmployeeID, Password from tblEmployees where EmployeeID = 12345
+}
+if (ListPOScmd = "SQL Server Mgmt Studio")
+{
+	clipboard = ssmsee
+}
+if (ListPOScmd = "UpdateLinks")
+{
+	clipboard = C:/IRIS/Setup/updatelinks.vbs
+}
+if (ListPOScmd = "RegMerge")
+{
+	clipboard = C:/IRIS/bin/regmerge.exe
+}
+if (ListPOSsql = "Check for IRIS Errors")
+{
+	clipboard = use IRIS; DBCC checkdb
+}
+if (ListPOSsql = "Check for POSLive Errors")
+{
+	clipboard = use poslive; DBCC checkdb
+}
+if (ListER = "Password Reset Hash")
+{
+	clipboard = {SHA}WPvUTd7dyZd6nS8tgm6DuxIHTyA=
+}
+if (ListER = "Bypass HME timer for No data received error")
+{
+	clipboard = C:\Altametrics\IBOI_Handler\batchfilehme.bat
+}
 
 return
 
