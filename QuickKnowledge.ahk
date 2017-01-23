@@ -3,7 +3,6 @@
 
 Gui, +MinSize640x 
 Gui, font, s12
-Gui, Add, Picture, x0 y100, tacobell.png
 Gui, Add, Text, x20 y83 +BackgroundTrans
 
 Gui, font, s20
@@ -11,9 +10,6 @@ Gui, Add, Text, +Wrap x15 y20 w680, Quick Knowledge
 Gui, font, s12
 Gui, Add, Text, +Wrap x60 y55 w680, written by 
 Gui, Add, Text, +Wrap x80 y75 w680, Mark Laxmeter
-Gui, Add, Text, +Wrap x80 y95 w680, 
-
-
 
 Gui, font, s15
 Gui, Add, Text, +Wrap x20 y125 w400, Select from the dropdowns to copy a KB number to the clipboard for fast knowledge access
@@ -27,7 +23,7 @@ Gui, Add, Text, x20 y270 w400, Common POS Knowledge
 Gui, Add, DropDownList, x20 y300 w475 vListKBPOS gOnselect, Kitchen orders not sending or bumping issues|Bind IP error or stuck on the blue QSR screen|Xpient register is running slow or locking up|Single register offline|Multiple registers offline|Register is frozen or locked up|Touch screen needs calibration or is unresponsive|Disable Biometrics via text file|Biometrics is not working|Need to bypass or disable biometrics scanner|Manually closing a drawer|POS - Stuck on EOD|
 
 Gui, Add, Text, x20 y340 w400, Common TACO Knowledge
-Gui, Add, DropDownList, x20 y370 w475 vListKBTACO gOnselect, Unable to poll the register issues|Gross sales do not equal total of register sales|Printer â€“ Brother printer is not working decision tree|End of Day is not successful, requiring Manual Sales|Getting a black screen after logging into TACO|Non-resettable total error (error 15)|Receipt information and troubleshooting|Register sales overring or refund does not equal gross sales|Closing outside of shift|HME â€“ Detection points and error codes|
+Gui, Add, DropDownList, x20 y370 w475 vListKBTACO gOnselect, Unable to poll the register issues|Gross sales do not equal total of register sales|Printer – Brother printer is not working decision tree|End of Day is not successful, requiring Manual Sales|Getting a black screen after logging into TACO|Non-resettable total error (error 15)|Receipt information and troubleshooting|Register sales overring or refund does not equal gross sales|Closing outside of shift|HME – Detection points and error codes|
 
 Gui, Add, Text, x20 y410 w400, Common eR Knowledge
 Gui, Add, DropDownList, x20 y440 w475 vListKBER gOnselect, Printer troubleshooting|TACO to eRestaurant conversions|New store install checklist for eRestaurant|BOH PC will not boot up|
@@ -36,18 +32,17 @@ Gui, Add, Text, x20 y480 w400, Common LZ Knowledge
 Gui, Add, DropDownList, x20 y510 w475 vListKBLZ gOnselect, LZ Course and Track issues|LZ Login Issues|Getting white screen in LZ on TACO PC|LZ Reporting Issues|Restoring WiFi connection on a managed tablet|
 
 Gui, Add, Text, x20 y620 w400, Generic Knowledge
-Gui, Add, DropDownList, x20 y650 w475 vListKBGEN gOnselect, KA unavailable Knowledge Missing form submitted|Duplicate case|Store Solved|No trouble found|Case was closed in Remedy, but not in ServiceNow|Referred|"Awaiting User Info" for over 5 days|Unable to reach user|Temporary service interruption|Store Declined Assistance|
+Gui, Add, DropDownList, x20 y650 w475 vListKBGEN gOnselect, KA unavailable Knowledge Missing form submitted|Duplicate case|Store Solved|No trouble found|Case was closed in Remedy, but not in ServiceNow|Referred|"Awaiting User Info" for over 5 days|Unable to reach user|Temporary service interruption|Store Declined Assistance|testitem
 
-
-return
 
 OnSelect:
 Gui, Submit, nohide
 
+Gui, show, w725 h850
 
 if (ListPHONE = "RANT AND RAVE")
 {
-	clipboard = 1-949-304-5259
+	clipboard = 19493045259
 }
 if (ListPHONE = "POS Queue")
 {
@@ -126,7 +121,7 @@ if (ListKBTACO = "Gross sales do not equal total of register sales")
 {
 	clipboard = CLIPBOARDcontentsHERE
 }
-if (ListKBTACO = "Printer â€“ Brother printer is not working decision tree")
+if (ListKBTACO = "Printer – Brother printer is not working decision tree")
 {
 	clipboard = CLIPBOARDcontentsHERE
 }
@@ -154,7 +149,7 @@ if (ListKBTACO = "Closing outside of shift")
 {
 	clipboard = CLIPBOARDcontentsHERE
 }
-if (ListKBTACO = "HME â€“ Detection points and error codes")
+if (ListKBTACO = "HME – Detection points and error codes")
 {
 	clipboard = CLIPBOARDcontentsHERE
 }
@@ -215,52 +210,4 @@ if (ListKBGEN = "testitem")
 	Gui, font, s20
 }
 
-
 return
-
-
-Datum:
-if A_GuiEvent=Normal
-{
-StringSplit, VonBis, ADat,-
-FormatTime, ADat1, %VonBis1%, %F%
-FormatTime, ADat2, %VonBis2%, %F%
-if (ADat1=ADat2)
-ADat:=%ADat1%
-else
-ADat:=%ADat1% - %ADat2%
-return
-}
-SetFinalPre(){
-FinalPre = ""
-InputBox, FinalPre, Select Final Or Prelim, Enter 0 for Final or 1 for Preliminary:, , 200, 150 
-Gui, Show
-Return FinalPre
-}
-SetPeriod(){
-Period = ""
-InputBox, Period, Select Period, Please type the Period number:, , 200, 150 
-Gui, Show
-Return Period
-}
-SetWeek(){
-Week = ""
-InputBox, Week, Select Week, Please type the Week number:, , 200, 150 
-Gui, Show
-return Week
-}
-SetDayEnd(){
-DayEnd = ""
-InputBox, DayEnd, Select DayEnd, Please type the Day End number:, , 200, 150 
-Gui, Show
-return DayEnd
-}
-SetShift(){
-Shift = ""
-InputBox, shift, Select shift, Please type the shift number:, , 200, 150 
-Gui, Show
-return Shift
-}
-
-MenuFileExit:
-^z::Process,Close,TacoReportsV4.exe
